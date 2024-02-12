@@ -1,45 +1,51 @@
-<div class="container mt-3">
+<div class="container mt-3" [class.darkMode]="IsDarkMode">
 
   <div class="row">
-    <div class="col-md-9"></div>
-    <div class="col-md-3">
+    <div class="col-md-9 mx-2"></div>
+    <div class="col-md-2">
       <div class="form-check">
-        <input class="form-check-input" type="checkbox" value="IsDarkMode" id="flexCheckDefault">
+        <input class="form-check-input" type="checkbox" [(ngModel)]="IsDarkMode" id="flexCheckDefault" (change)="onDarkModeChange($event)">
         <label class="form-check-label" for="flexCheckDefault">
           DarkMode
         </label>
       </div>
     </div>
   </div>
-  <div class="row">
-    <div class="container mb-3">
-      <div class="d-flex mx-2">
-        <!--<label class="col-form-label">Search for a movie:</label>-->
-        <input type="text" class="form-control sm-1" style="width:180px;" [(ngModel)]="searchText" (keyup)="onSearchChange($event)" />
-      </div>
+  <hr />
+  <div class="row mb-3">
+    <!--<div class="container mb-3">-->
+    <div class="col-md-2 mx-2">
+      <!--<label class="col-form-label">Search for a movie:</label>-->
+      <input type="text" class="form-control sm-1" style="width:180px;" placeholder="search for movie" [(ngModel)]="searchText" (keyup)="onSearchChange($event)" />
+    </div>
+    <div class="col-md-7"></div>
+    <div class="col-md-2 text-end">
 
-      <div class="col text-end mx-2">
 
-
-        <div ngbDropdown class="d-inline-block">
-          <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Categories</button>
-          <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-            <button (click)="ClickCategory('Movie')" ngbDropdownItem>Movies</button>
-            <button (click)="ClickCategory('Series')" ngbDropdownItem>Series</button>
-            <button (click)="ClickCategory('Episode')" ngbDropdownItem>Episode</button>
-          </div>
+      <div ngbDropdown class="d-inline-block">
+        <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>Categories</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button (click)="ClickCategory('Movie')" ngbDropdownItem>Movies</button>
+          <button (click)="ClickCategory('Series')" ngbDropdownItem>Series</button>
+          <button (click)="ClickCategory('Episode')" ngbDropdownItem>Episode</button>
         </div>
       </div>
     </div>
+    <!--</div>-->
   </div>
+
+ 
+ 
   <div class="row">
-    @for (movie of movies; track movie.imdbID) {
+
+    @for (movie of movies; track movie; let index = $index) {
+
     <div class="col-md-2">
 
       <div class="card mb-4">
 
         <div class="card-img-wrapper">
-          <img src="{{movie.Poster}}" alt="{{movie.imdbID}}" class="card-img-top" />
+          <img src="{{movie.Poster}}" alt="{{movie.imdbID}}" class="card-img-top" (click)="ClickOnMovie(movie.imdbID)" />
 
         </div>
         <div class="card-body p-1">
@@ -58,8 +64,9 @@
 
     </div>
     }
-
   </div>
+ 
+ 
   @if(movies){
   <ngb-pagination [collectionSize]="totalResults" [maxSize]="5" [boundaryLinks]="true" [(page)]="page" aria-label="Default pagination" (pageChange)="pageChange($event)" />
   }

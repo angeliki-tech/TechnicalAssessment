@@ -1,15 +1,35 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
+
+export interface MovieDetails {
+  Poster: string;
+  Type: string;
+  Year: string;
+  imdbID: string;
+  Title: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchService {
   url: string = 'https://www.omdbapi.com/';
-  constructor(private http: HttpClient) { }
+
+  private movieD$ = new BehaviorSubject<MovieDetails>(<MovieDetails>({ Poster: '', Type: '', Year: '', imdbID: '', Title: '' }));
+  currentMovie$ = this.movieD$.asObservable();
+
+  constructor(private http: HttpClient) {
+   
+  }
 
 
-
+ 
+ 
+  SetMovie(mov: MovieDetails) {
+    debugger
+    this.movieD$.next(mov);
+  }
   getMoviesData(searchText: string) {
     const httpOptions = {
       headers: new HttpHeaders({

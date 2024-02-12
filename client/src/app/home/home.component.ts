@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { NgbDropdownModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
-import { SearchService } from '../_services/search.service';
+import { MovieDetails, SearchService } from '../_services/search.service';
 
 @Component({
   selector: 'app-home',
@@ -20,12 +20,14 @@ export class HomeComponent {
   enablePagination: boolean = false;
   category: string = "";
   IsDarkMode: boolean = false;
+  movie: any;
   constructor(private search: SearchService) {
 
   }
 
   ngOnInit() {
     this.getMovies(this.searchText);
+    this.CheckDarkMode();
   }
 
   getMovies(title: string) {
@@ -70,5 +72,26 @@ export class HomeComponent {
      
       this.movies = this.movies.Search;
     });
+  }
+
+  ClickOnMovie(movieId: string) {
+    for (var movie of this.movies) {
+      if (movie.imdbID === movieId) {
+        this.movie = movie;
+      }
+    }
+    localStorage.setItem("movie", JSON.stringify(this.movie));
+    this.search.SetMovie(this.movie);
+    window.open("movie/details", "_blank");
+  }
+
+  onDarkModeChange(e: any) {
+
+    localStorage.setItem("IsDarkMode", JSON.stringify(this.IsDarkMode));
+    
+  }
+
+  CheckDarkMode() {
+    this.IsDarkMode = JSON.parse(localStorage.getItem('IsDarkMode')|| 'false');
   }
 }
